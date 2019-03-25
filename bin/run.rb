@@ -1,3 +1,5 @@
 require_relative '../config/environment'
 
-puts "hello world"
+welcome
+get_name
+get_location
