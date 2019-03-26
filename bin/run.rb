@@ -1,5 +1,5 @@
 require_relative '../config/environment'
-
-welcome
-get_name
-get_location
+cli = CommandLineInterface.new
+cli.welcome
+cli.get_name
+cli.get_location
