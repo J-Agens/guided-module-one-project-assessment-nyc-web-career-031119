@@ -9,3 +9,4 @@ gem "sqlite3", '~> 1.3.6'
 gem "pry"
 gem "rest-client"
 gem "faker"
+gem "colorize"

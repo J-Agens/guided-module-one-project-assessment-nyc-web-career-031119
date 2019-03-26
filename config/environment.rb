@@ -6,5 +6,8 @@ ActiveRecord::Base.establish_connection(
   database: 'db/ar.db'
 )
 
+# STOP ACTIVERECORD LOGGING
+ActiveRecord::Base.logger = nil
+
 require_all 'app'
 require_all 'lib'

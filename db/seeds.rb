@@ -9,7 +9,7 @@ binding.pry
 
 i = 0
 data.each do |job_hash|
-  Job.create(title: data[i]["title"], location: data[i]["location"], description: data[i]["description"], company: data[i]["company"], job_type: data[i]["type"])
+  Job.create(title: data[i]["title"], location: data[i]["location"], description: data[i]["description"], company: data[i]["company"], job_type: data[i]["type"], github_id: data[i]["id"])
   i += 1
 end
 
