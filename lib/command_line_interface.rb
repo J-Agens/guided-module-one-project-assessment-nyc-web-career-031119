@@ -7,6 +7,8 @@ class CommandLineInterface
     @apps_sent = 0
   end
 
+  # \033[1mbold\033[0m
+
   def welcome
     puts "Welcome unemployed person!"
     print "What is your name? "
@@ -35,12 +37,13 @@ class CommandLineInterface
 
     i = 0
     data.each do |job_hash|
-      puts "****************"
-      puts data[i]["title"]
-      puts data[i]["company"]
-      puts data[i]["type"]
-      puts data[i]["location"]
-      puts "ID ##{data[i]["id"].slice(-5, 5)}"
+      puts "------------------------------------------"
+      puts "\033[1mTitle:    #{data[i]["title"]}\033[0m"
+      puts "Company:  #{data[i]["company"]}"
+      puts "Type:     #{data[i]["type"]}"
+      puts "Location: #{data[i]["location"]}"
+      puts "ID #:     #{data[i]["id"].slice(-5, 5)}"
+      puts "------------------------------------------"
       @searched_jobs << Job.new(title: data[i]["title"], location: data[i]["location"], description: data[i]["description"], company: data[i]["company"], job_type: data[i]["type"], github_id: data[i]["id"])
       i += 1
     end
@@ -180,10 +183,11 @@ end
   end
 
   def display_leaderboard
-    puts "    TOP FIVE USERS".colorize(:red)
+    puts "    \033[1mTOP FIVE USERS\033[0m".colorize(:red)
     sort_all_users_by_app_count.first(5).each do |user|
-      puts "#{user[0].name} : #{user[1]}"
+      puts "      \033[1m#{user[0].name}\033[0m : #{user[1]}"
     end
+    puts " "
   end
 
   def exit_job_search
