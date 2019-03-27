@@ -62,9 +62,22 @@ class CommandLineInterface
       new_job = @searched_jobs.find do |job|
         job.github_id.include?(user_input)
       end
-      new_job.save
-      Application.create(user_id: @user.id, job_id: new_job.id)
-      puts "APPLICATION SENT".colorize(:green)
+      if !gh_ids_of_jobs_applied.include?(user_input)
+        new_job.save
+        Application.create(user_id: @user.id, job_id: new_job.id)
+        puts "APPLICATION SENT".colorize(:green)
+      else
+        puts "YOU'VE ALREADY APPLIED TO THIS JOB".red
+        print "Do you want send another application? (Y/N): "
+        user_input = gets.chomp
+        if user_input.downcase == "y" || user_input.downcase == "yes"
+          new_job.save
+          Application.create(user_id: @user.id, job_id: new_job.id)
+          puts "APPLICATION SENT".colorize(:green)
+        else
+          "Good choice!"
+        end
+      end
     end
   end
 
@@ -83,13 +96,19 @@ class CommandLineInterface
     Application.where(user_id: @user.id)
   end
 
+  def gh_ids_of_jobs_applied
+    list_of_applications.map do |app|
+      app.job.github_id.slice(-5, 5)
+    end
+  end
+
   def applications_menu
     menu_input = ""
     while menu_input != "3"
-      puts "What would you like to do with your applications?"
+      puts "Here are your options"
       puts "    1) Read description of a job. 2)Remove an application".colorize(:blue)
       puts "    3) Return to main menu.".colorize(:blue)
-      print ":"
+      print "Type in the number of your choice: "
       menu_input = gets.chomp
       if menu_input == "1"
         print "Type in the ID number of the job you would like to see more information on: "
