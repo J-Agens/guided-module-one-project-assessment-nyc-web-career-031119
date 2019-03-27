@@ -65,9 +65,13 @@ def apply_to_job
       job.github_id.include?(user_input)
     end
     if !gh_ids_of_jobs_applied.include?(user_input)
-      new_job.save
-      Application.create(user_id: @user.id, job_id: new_job.id)
-      puts "APPLICATION SAVED".colorize(:green)
+      if new_job.is_a?(Job)
+        new_job.save
+        Application.create(user_id: @user.id, job_id: new_job.id)
+        puts "APPLICATION SAVED".colorize(:green)
+      else
+        puts "INVALID ID".red
+      end
     else
       puts "YOU'VE ALREADY APPLIED TO THIS JOB".red
       print "Do you want send another application? (Y/N): "
@@ -196,6 +200,7 @@ end
       puts "    5) Exit".colorize(:blue)
       print "What would you like to do today? "
       input = gets.chomp
+      puts `clear`
       if input == "1"
         get_location
         get_language
