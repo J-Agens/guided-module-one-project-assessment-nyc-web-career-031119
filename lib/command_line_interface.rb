@@ -44,7 +44,7 @@ class CommandLineInterface
       @searched_jobs << Job.new(title: data[i]["title"], location: data[i]["location"], description: data[i]["description"], company: data[i]["company"], job_type: data[i]["type"], github_id: data[i]["id"])
       i += 1
     end
-    print "Would you like to apply to any of these jobs? (Y/N):"
+    print "Would you like to apply to any of these jobs?" + " (Y/N): ".green
   end
 
   def get_language
@@ -67,7 +67,7 @@ def apply_to_job
     if !gh_ids_of_jobs_applied.include?(user_input)
       new_job.save
       Application.create(user_id: @user.id, job_id: new_job.id)
-      puts "APPLICATION SENT".colorize(:green)
+      puts "APPLICATION SAVED".colorize(:green)
     else
       puts "YOU'VE ALREADY APPLIED TO THIS JOB".red
       print "Do you want send another application? (Y/N): "
@@ -75,7 +75,7 @@ def apply_to_job
       if user_input.downcase == "y" || user_input.downcase == "yes"
         new_job.save
         Application.create(user_id: @user.id, job_id: new_job.id)
-        puts "APPLICATION SENT".colorize(:green)
+        puts "APPLICATION SAVED".colorize(:green)
       else
         puts "Good choice!"
       end
@@ -167,6 +167,7 @@ end
       puts "*" *7
     end
   end
+
   def sort_all_users_by_app_count
     Application.group(:user).count.sort_by do |application|
       application[1]
