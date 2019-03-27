@@ -13,12 +13,12 @@ class CommandLineInterface
   end
 
   def get_name
-    user_input = gets.chomp
+    user_input = gets.chomp.capitalize
     if User.find_by(name: user_input) == nil
       self.user = User.create(name: user_input)
     else
       self.user = User.find_by(name: user_input)
-      puts "Welcome Back #{user_input}"
+      puts "Welcome Back #{user_input.capitalize}"
     end
   end
 
@@ -87,6 +87,7 @@ def apply_to_job
     print "Would you like to apply to another one of these jobs?" + "(Y/N): ".green
     new_input = gets.chomp
     if new_input.downcase == "y" || user_input.downcase == "yes"
+      puts `clear`
       apply_again
     else
       puts "..."
@@ -102,7 +103,6 @@ def apply_again
 end
 
   def display_user_applications
-    puts "You have #{list_of_applications.count} applications saved."
     list_of_applications.each do |application|
       puts "*" * 7
       puts Job.where(id: application.job_id)[0].title
@@ -110,6 +110,7 @@ end
       puts "ID#:#{Job.where(id: application.job_id)[0].id}"
       puts "-" * 7
     end
+    puts "You have #{list_of_applications.count} applications saved."
   end
 
   def list_of_applications
@@ -186,7 +187,7 @@ end
   end
 
   def exit_job_search
-    puts "GOODBYE".colorize(:red)
+    puts "Hope you get a call back, if not we'll see you again.".colorize(:red)
   end
 
   ### Main Menu ###
@@ -202,6 +203,7 @@ end
       input = gets.chomp
       puts `clear`
       if input == "1"
+        puts "* If location and language doesn't apply, just hit enter. *".green
         get_location
         get_language
         puts `clear`
