@@ -20,7 +20,7 @@ class CommandLineInterface
       self.user = User.create(name: user_input)
     else
       self.user = User.find_by(name: user_input)
-      puts "Welcome Back #{user_input.capitalize}"
+      puts "Welcome Back, #{user_input.capitalize}!"
     end
   end
 
@@ -96,6 +96,7 @@ def apply_to_job
       puts "..."
     end
   elsif user_input.downcase == "n" || user_input.downcase == "no"
+    puts `clear`
     puts "..."
   end
 end
