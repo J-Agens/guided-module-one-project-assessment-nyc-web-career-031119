@@ -4,6 +4,7 @@ class CommandLineInterface
 
   def initialize
     @searched_jobs = []
+    @apps_sent = 0
   end
 
   def welcome
@@ -43,6 +44,7 @@ class CommandLineInterface
       @searched_jobs << Job.new(title: data[i]["title"], location: data[i]["location"], description: data[i]["description"], company: data[i]["company"], job_type: data[i]["type"], github_id: data[i]["id"])
       i += 1
     end
+    print "Would you like to apply to any of these jobs? (Y/N):"
   end
 
   def get_language
@@ -52,34 +54,48 @@ class CommandLineInterface
     @user.save
   end
 
-  def apply_to_job
-    print "Would you like to apply to any of these jobs? (Y/N):"
+def apply_to_job
+  # print "Would you like to apply to any of these jobs? (Y/N):"
+  user_input = gets.chomp
+  if user_input.downcase == "y" || user_input.downcase == "yes"
+    puts "Which job would you like to apply for?"
+    print "Type in the job ID# :"
     user_input = gets.chomp
-    if user_input.downcase == "y" || user_input.downcase == "yes"
-      puts "Which job would you like to apply for?"
-      print "Type in the job ID# :"
+    new_job = @searched_jobs.find do |job|
+      job.github_id.include?(user_input)
+    end
+    if !gh_ids_of_jobs_applied.include?(user_input)
+      new_job.save
+      Application.create(user_id: @user.id, job_id: new_job.id)
+      puts "APPLICATION SENT".colorize(:green)
+    else
+      puts "YOU'VE ALREADY APPLIED TO THIS JOB".red
+      print "Do you want send another application? (Y/N): "
       user_input = gets.chomp
-      new_job = @searched_jobs.find do |job|
-        job.github_id.include?(user_input)
-      end
-      if !gh_ids_of_jobs_applied.include?(user_input)
+      if user_input.downcase == "y" || user_input.downcase == "yes"
         new_job.save
         Application.create(user_id: @user.id, job_id: new_job.id)
         puts "APPLICATION SENT".colorize(:green)
       else
-        puts "YOU'VE ALREADY APPLIED TO THIS JOB".red
-        print "Do you want send another application? (Y/N): "
-        user_input = gets.chomp
-        if user_input.downcase == "y" || user_input.downcase == "yes"
-          new_job.save
-          Application.create(user_id: @user.id, job_id: new_job.id)
-          puts "APPLICATION SENT".colorize(:green)
-        else
-          "Good choice!"
-        end
+        puts "Good choice!"
       end
     end
+    print "Would you like to apply to another one of these jobs?" + "(Y/N): ".green
+    new_input = gets.chomp
+    if new_input.downcase == "y" || user_input.downcase == "yes"
+      apply_again
+    else
+      puts "..."
+    end
+  elsif user_input.downcase == "n" || user_input.downcase == "no"
+    puts "..."
   end
+end
+
+def apply_again
+  display_search
+  apply_to_job
+end
 
   def display_user_applications
     puts "You have #{list_of_applications.count} applications saved."
@@ -182,6 +198,7 @@ class CommandLineInterface
       if input == "1"
         get_location
         get_language
+        puts `clear`
         display_search
         apply_to_job
       elsif input == "2"
@@ -195,7 +212,6 @@ class CommandLineInterface
       elsif input == "3"
       sort_popular_jobs
       display_popular_jobs
-
       elsif input == "4"
         display_leaderboard
       elsif input == "5"
