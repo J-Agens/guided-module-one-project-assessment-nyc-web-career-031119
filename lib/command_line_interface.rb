@@ -106,7 +106,7 @@ class CommandLineInterface
         print "Type in the ID of the application you would like to remove: "
         menu_input = gets.chomp
         Application.where(job_id: menu_input)[0].destroy
-        puts "Removal Successful!"
+        puts "REMOVAL SUCCESSFUL!".green
 
       elsif menu_input == "3" || list_of_applications.count == 0
         puts `clear`
@@ -117,10 +117,31 @@ class CommandLineInterface
     end
   end
 
+  # SEE popular jobs option 3
+
+  def sort_popular_jobs
+    Application.group(:job).count.sort_by do |job|
+      job[1]
+    end.reverse
+  end
+
+  def display_popular_jobs
+    puts "These are the hottest jobs on the market"
+    sort_popular_jobs.first(5).each do |job|
+      puts "#{job[0].title.upcase}".colorize(:green) + " with " + "#{job[1]}".colorize(:red) + " applications."
+      puts "*" *7
+    end
+  end
+  def sort_all_users_by_app_count
+    Application.group(:user).count.sort_by do |application|
+      application[1]
+    end.reverse
+  end
+
   def display_leaderboard
     puts "    TOP FIVE USERS".colorize(:red)
-    Application.group(:user).count.first(5).each do |key, value|
-      puts "#{key[:name]} : #{value}"
+    sort_all_users_by_app_count.first(5).each do |user|
+      puts "#{user[0].name} : #{user[1]}"
     end
   end
 
@@ -128,18 +149,8 @@ class CommandLineInterface
     puts "GOODBYE".colorize(:red)
   end
 
+  ### Main Menu ###
   def run
-    welcome
-    #help / main menu
-    get_name
-    get_location
-    get_language
-    display_search
-    apply_to_job
-  end
-
-  ### EXPERIMENT ###
-  def run2
     welcome
     input = ""
     get_name
@@ -162,6 +173,10 @@ class CommandLineInterface
           puts "You have 0 applications saved".colorize(:red)
           puts "Returned to Main Menu".colorize(:red)
         end
+      elsif input == "3"
+      sort_popular_jobs
+      display_popular_jobs
+
       elsif input == "4"
         display_leaderboard
       elsif input == "5"

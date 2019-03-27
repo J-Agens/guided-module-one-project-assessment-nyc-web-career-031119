@@ -1,4 +1,5 @@
 require 'bundler'
+require 'colorize'
 Bundler.require
 
 ActiveRecord::Base.establish_connection(
