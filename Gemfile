@@ -10,3 +10,4 @@ gem "pry"
 gem "rest-client"
 gem "faker"
 gem "colorize"
+gem 'tty-prompt'

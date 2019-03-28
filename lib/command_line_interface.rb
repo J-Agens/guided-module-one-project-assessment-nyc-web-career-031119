@@ -138,13 +138,15 @@ end
 
   def applications_menu
     menu_input = ""
-    while menu_input != "3"
-      puts "Here are your options"
-      puts "    1) Read description of a job. 2)Remove an application".colorize(:yellow)
-      puts "    3) Return to main menu.".colorize(:yellow)
-      print "Type in the number of your choice: "
-      menu_input = gets.chomp
-      if menu_input == "1"
+    while menu_input != 3
+      prompt_b = TTY::Prompt.new
+      choices = [
+        {name: 'Read Description of a Job'.yellow, value: 1},
+        {name: 'Remove an Application'.yellow, value: 2},
+        {name: 'Return to Main Menu'.yellow, value: 3}
+      ]
+      menu_input = prompt_b.select("Select an action.".yellow, choices)
+      if menu_input == 1
         print "Type in the ID number of the job you would like to see more information on: ".yellow
 
         menu_input = gets.chomp
@@ -155,13 +157,13 @@ end
           puts "Invalid input, please try again.".colorize(:red)
         end
 
-      elsif menu_input == "2"
+      elsif menu_input == 2
         print "Type in the ID of the application you would like to remove: ".yellow
         menu_input = gets.chomp
         Application.where(job_id: menu_input)[0].destroy
         puts "REMOVAL SUCCESSFUL!".red
 
-      elsif menu_input == "3" || list_of_applications.count == 0
+      elsif menu_input == 3 || list_of_applications.count == 0
         puts `clear`
         puts "Returned to Main Menu".colorize(:red)
       else
@@ -216,21 +218,25 @@ end
     welcome
     input = ""
     get_name
-    while input != "5"
-      puts "    1) Search for a new job.  2) See my applications.".colorize(:yellow)
-      puts "    3) See popular jobs.      4) See Users with Most Applications".colorize(:yellow)
-      puts "    5) Exit".colorize(:yellow)
-      print "What would you like to do today? "
-      input = gets.chomp
+    while input != 5
+      prompt = TTY::Prompt.new
+      choices = [
+        {name: 'Search for a New Job'.yellow, value: 1},
+        {name: 'See My Applications'.yellow, value: 2},
+        {name: 'See Popular Jobs'.yellow, value: 3},
+        {name: 'See Users with Most Applications'.yellow, value: 4},
+        {name: 'Exit'.yellow, value: 5}
+      ]
+      input = prompt.select("Select an action.".yellow, choices)
       puts `clear`
-      if input == "1"
+      if input == 1
         puts "* If location and language doesn't apply, just hit enter. *".red
         get_location
         get_language
         puts `clear`
         display_search
         apply_to_job
-      elsif input == "2"
+      elsif input == 2
         if list_of_applications.count > 0
           display_user_applications
           applications_menu
@@ -238,12 +244,12 @@ end
           puts "You have 0 applications saved".colorize(:red)
           puts "Returned to Main Menu".colorize(:red)
         end
-      elsif input == "3"
+      elsif input == 3
       sort_popular_jobs
       display_popular_jobs
-      elsif input == "4"
+    elsif input == 4
         display_leaderboard
-      elsif input == "5"
+      elsif input == 5
         puts `clear`
         exit_job_search
       end

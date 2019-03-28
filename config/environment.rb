@@ -1,5 +1,6 @@
 require 'bundler'
 require 'colorize'
+require 'tty-prompt'
 Bundler.require
 
 ActiveRecord::Base.establish_connection(
