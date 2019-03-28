@@ -122,7 +122,7 @@ end
 
   def display_user_applications
     puts "      MY APPLICATIONS"
-    list_of_applications.each do |application|
+    list_of_applications.take(5).each do |application|
       puts "-".colorize(:blue) * 30
       puts Job.where(id: application.job_id)[0].title
       puts Job.where(id: application.job_id)[0].location
@@ -172,8 +172,9 @@ end
         print "Type in the ID of the application you would like to remove: ".yellow
         menu_input = gets.chomp
         Application.where(job_id: menu_input)[0].destroy
+        puts `clear`
+        display_user_applications
         puts "REMOVAL SUCCESSFUL!".red
-
       elsif menu_input == 3 || list_of_applications.count == 0
         puts `clear`
         puts "Returned to Main Menu".colorize(:red)
