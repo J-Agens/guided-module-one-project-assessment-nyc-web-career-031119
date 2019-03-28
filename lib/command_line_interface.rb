@@ -31,23 +31,23 @@ class CommandLineInterface
     @user.save
   end
 
-  def display_search
-    response = RestClient.get("https://jobs.github.com/positions.json?utf8=%E2%9C%93&description=#{@user.favorite_language.split(' ').join('+')}&location=#{@user.location.split(' ').join('+')}")
-    data = JSON.parse(response.body)
+  def rotate_data
+    @data.rotate!(5)
+  end
 
+  def display_search
     i = 0
-    data.each do |job_hash|
+    @data.take(5).each do |job_hash|
       puts "------------------------------------------"
-      puts "\033[1mTitle:    #{data[i]["title"]}\033[0m"
-      puts "Company:  #{data[i]["company"]}"
-      puts "Type:     #{data[i]["type"]}"
-      puts "Location: #{data[i]["location"]}"
-      puts "ID #:     #{data[i]["id"].slice(-5, 5)}"
+      puts "\033[1mTitle:    #{@data[i]["title"]}\033[0m"
+      puts "Company:  #{@data[i]["company"]}"
+      puts "Type:     #{@data[i]["type"]}"
+      puts "Location: #{@data[i]["location"]}"
+      puts "ID #:     #{@data[i]["id"].slice(-5, 5)}"
       puts "------------------------------------------"
-      @searched_jobs << Job.new(title: data[i]["title"], location: data[i]["location"], description: data[i]["description"], company: data[i]["company"], job_type: data[i]["type"], github_id: data[i]["id"])
+      @searched_jobs << Job.new(title: @data[i]["title"], location: @data[i]["location"], description: @data[i]["description"], company: @data[i]["company"], job_type: @data[i]["type"], github_id: @data[i]["id"])
       i += 1
     end
-    print "Would you like to apply to any of these jobs?".yellow + " (Y/N): ".green
   end
 
   def get_language
@@ -55,12 +55,23 @@ class CommandLineInterface
     user_input = gets.chomp
     @user.favorite_language = user_input
     @user.save
+    @response = RestClient.get("https://jobs.github.com/positions.json?utf8=%E2%9C%93&description=#{@user.favorite_language.split(' ').join('+')}&location=#{@user.location.split(' ').join('+')}")
+    @data = JSON.parse(@response.body)
   end
 
 def apply_to_job
-  # print "Would you like to apply to any of these jobs? (Y/N):"
-  user_input = gets.chomp
-  if user_input.downcase == "y" || user_input.downcase == "yes"
+  prompt_c = TTY::Prompt.new
+  choices = [
+    {name: 'Page Forward'.yellow, value: 1},
+    {name: 'Apply to a Job'.yellow, value: 3},
+    {name: 'Return to Main Menu'.yellow, value: 4}
+  ]
+  user_input = prompt_c.select("Select an action.".yellow, choices)
+  if user_input == 1
+    puts `clear`
+    rotate_data
+    apply_again
+  elsif user_input == 3
     puts "Which job would you like to apply for?".yellow
     print "Type in the job ID# :".yellow
     user_input = gets.chomp
@@ -77,7 +88,7 @@ def apply_to_job
       end
     else
       puts "YOU'VE ALREADY APPLIED TO THIS JOB".red
-      print "Do you want send another application?".yellow " (Y/N): ".green
+      print "Do you want send another application?".yellow + " (Y/N): ".green
       user_input = gets.chomp
       if user_input.downcase == "y" || user_input.downcase == "yes"
         new_job.save
@@ -87,7 +98,7 @@ def apply_to_job
         puts "Good choice!"
       end
     end
-    print "Would you like to apply to another one of these jobs?".yellow + "(Y/N): ".green
+    print "Would you like to apply to any of these jobs?".yellow + "(Y/N): ".green
     new_input = gets.chomp
     if new_input.downcase == "y" || user_input.downcase == "yes"
       puts `clear`
@@ -97,7 +108,7 @@ def apply_to_job
       puts "    MAIN MENU "
       puts " "
     end
-  elsif user_input.downcase == "n" || user_input.downcase == "no"
+  elsif user_input == 4
     puts `clear`
     puts "    MAIN MENU"
     puts " "
