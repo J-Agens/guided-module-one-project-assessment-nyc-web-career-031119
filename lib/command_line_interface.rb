@@ -182,7 +182,11 @@ end
     puts "These are the most popular jobs on the market"
     sort_popular_jobs.first(5).each_with_index do |job, i|
       puts "-".colorize(:blue) * 30
-      puts "#{i + 1}. #{job[0].title.upcase}" + " with " + "#{job[1]}".colorize(:red) + " applications."
+      if job[0].is_a?(Job)
+        puts "#{i + 1}. #{job[0].title.upcase}" + " with " + "#{job[1]}".colorize(:red) + " applications."
+      else
+        puts "#{i + 1}. UNTITLED" + " with " + "#{job[1]}".colorize(:red) + " applications."
+      end
       puts "-".colorize(:blue) * 30
     end
   end
