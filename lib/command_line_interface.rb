@@ -126,6 +126,10 @@ end
       app.job.github_id.slice(-5, 5)
     end
   end
+# NONBREAKING SPACE
+  def bsp
+  [10].pack('U*')
+  end
 
   def applications_menu
     menu_input = ""
@@ -140,7 +144,7 @@ end
 
         menu_input = gets.chomp
         if Job.where(id: menu_input)[0] != nil
-        puts Job.where(id: menu_input)[0].description
+        puts Job.where(id: menu_input)[0].description.gsub!(/<p.*?>|<\/p>/, '').gsub!(/<h1.*?>|<\/h1>/, bsp).gsub!(/<li.*?>|<\/li>/, "  * ").gsub!(/<ul.*?>|<\/ul>/, '')
         puts "-" * 7
         else
           puts "Invalid input, please try again.".colorize(:red)
