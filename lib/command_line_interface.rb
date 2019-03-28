@@ -20,7 +20,7 @@ class CommandLineInterface
       self.user = User.create(name: user_input)
     else
       self.user = User.find_by(name: user_input)
-      puts "Welcome Back, #{user_input.capitalize}!"
+      puts "Welcome back, #{user_input.capitalize}!"
     end
   end
 
@@ -93,11 +93,14 @@ def apply_to_job
       puts `clear`
       apply_again
     else
-      puts "..."
+      puts `clear`
+      puts "    MAIN MENU "
+      puts " "
     end
   elsif user_input.downcase == "n" || user_input.downcase == "no"
     puts `clear`
-    puts "..."
+    puts "    MAIN MENU"
+    puts " "
   end
 end
 
@@ -107,14 +110,16 @@ def apply_again
 end
 
   def display_user_applications
+    puts "      MY APPLICATIONS"
     list_of_applications.each do |application|
-      puts "*" * 7
+      puts "-".colorize(:blue) * 30
       puts Job.where(id: application.job_id)[0].title
       puts Job.where(id: application.job_id)[0].location
       puts "ID#:#{Job.where(id: application.job_id)[0].id}"
-      puts "-" * 7
+      puts "-".colorize(:blue) * 30
     end
-    puts "You have #{list_of_applications.count} applications saved."
+    puts " "
+    puts "You have #{list_of_applications.count} applications saved.".red
   end
 
   def list_of_applications
@@ -144,7 +149,7 @@ end
 
         menu_input = gets.chomp
         if Job.where(id: menu_input)[0] != nil
-        puts Job.where(id: menu_input)[0].description.gsub!(/<p.*?>|<\/p>/, '').gsub!(/<h1.*?>|<\/h1>/, bsp).gsub!(/<li.*?>|<\/li>/, "  * ").gsub!(/<ul.*?>|<\/ul>/, '')
+        puts Job.where(id: menu_input)[0].description.gsub(/<p.*?>|<\/p>/, '').gsub(/<h1.*?>|<\/h1>/, bsp).gsub(/<li.*?>|<\/li>/, "  * ").gsub(/<ul.*?>|<\/ul>/, '').gsub(/<strong.*?>|<\/strong>/, '')
         puts "-" * 7
         else
           puts "Invalid input, please try again.".colorize(:red)
@@ -154,7 +159,7 @@ end
         print "Type in the ID of the application you would like to remove: ".yellow
         menu_input = gets.chomp
         Application.where(job_id: menu_input)[0].destroy
-        puts "REMOVAL SUCCESSFUL!".green
+        puts "REMOVAL SUCCESSFUL!".red
 
       elsif menu_input == "3" || list_of_applications.count == 0
         puts `clear`
@@ -174,7 +179,7 @@ end
   end
 
   def display_popular_jobs
-    puts "These are the hottest jobs on the market"
+    puts "These are the most popular jobs on the market"
     sort_popular_jobs.first(5).each_with_index do |job, i|
       puts "-".colorize(:blue) * 30
       puts "#{i + 1}. #{job[0].title.upcase}" + " with " + "#{job[1]}".colorize(:red) + " applications."
