@@ -10,14 +10,16 @@ class CommandLineInterface
   # \033[1mbold\033[0m
 
   def welcome
-    puts "Welcome unemployed person!"
+    puts "Greetings unemployed person!"
     print "What is your name? "
   end
 
   def get_name
     user_input = gets.chomp.capitalize
+    puts `clear`
     if User.find_by(name: user_input) == nil
       self.user = User.create(name: user_input)
+      puts "Welcome #{user_input}, it looks like this is your first time here!"
     else
       self.user = User.find_by(name: user_input)
       puts "Welcome back, #{user_input.capitalize}!"
