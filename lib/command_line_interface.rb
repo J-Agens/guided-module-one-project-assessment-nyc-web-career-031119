@@ -47,7 +47,7 @@ class CommandLineInterface
       @searched_jobs << Job.new(title: data[i]["title"], location: data[i]["location"], description: data[i]["description"], company: data[i]["company"], job_type: data[i]["type"], github_id: data[i]["id"])
       i += 1
     end
-    print "Would you like to apply to any of these jobs?" + " (Y/N): ".green
+    print "Would you like to apply to any of these jobs?".yellow + " (Y/N): ".green
   end
 
   def get_language
@@ -61,8 +61,8 @@ def apply_to_job
   # print "Would you like to apply to any of these jobs? (Y/N):"
   user_input = gets.chomp
   if user_input.downcase == "y" || user_input.downcase == "yes"
-    puts "Which job would you like to apply for?"
-    print "Type in the job ID# :"
+    puts "Which job would you like to apply for?".yellow
+    print "Type in the job ID# :".yellow
     user_input = gets.chomp
     new_job = @searched_jobs.find do |job|
       job.github_id.include?(user_input)
@@ -71,13 +71,13 @@ def apply_to_job
       if new_job.is_a?(Job)
         new_job.save
         Application.create(user_id: @user.id, job_id: new_job.id)
-        puts "APPLICATION SAVED".colorize(:green)
+        puts "APPLICATION SAVED".colorize(:red)
       else
         puts "INVALID ID".red
       end
     else
       puts "YOU'VE ALREADY APPLIED TO THIS JOB".red
-      print "Do you want send another application? (Y/N): "
+      print "Do you want send another application?".yellow " (Y/N): ".green
       user_input = gets.chomp
       if user_input.downcase == "y" || user_input.downcase == "yes"
         new_job.save
@@ -87,7 +87,7 @@ def apply_to_job
         puts "Good choice!"
       end
     end
-    print "Would you like to apply to another one of these jobs?" + "(Y/N): ".green
+    print "Would you like to apply to another one of these jobs?".yellow + "(Y/N): ".green
     new_input = gets.chomp
     if new_input.downcase == "y" || user_input.downcase == "yes"
       puts `clear`
@@ -131,12 +131,12 @@ end
     menu_input = ""
     while menu_input != "3"
       puts "Here are your options"
-      puts "    1) Read description of a job. 2)Remove an application".colorize(:blue)
-      puts "    3) Return to main menu.".colorize(:blue)
+      puts "    1) Read description of a job. 2)Remove an application".colorize(:yellow)
+      puts "    3) Return to main menu.".colorize(:yellow)
       print "Type in the number of your choice: "
       menu_input = gets.chomp
       if menu_input == "1"
-        print "Type in the ID number of the job you would like to see more information on: "
+        print "Type in the ID number of the job you would like to see more information on: ".yellow
 
         menu_input = gets.chomp
         if Job.where(id: menu_input)[0] != nil
@@ -147,7 +147,7 @@ end
         end
 
       elsif menu_input == "2"
-        print "Type in the ID of the application you would like to remove: "
+        print "Type in the ID of the application you would like to remove: ".yellow
         menu_input = gets.chomp
         Application.where(job_id: menu_input)[0].destroy
         puts "REMOVAL SUCCESSFUL!".green
@@ -171,9 +171,10 @@ end
 
   def display_popular_jobs
     puts "These are the hottest jobs on the market"
-    sort_popular_jobs.first(5).each do |job|
-      puts "#{job[0].title.upcase}".colorize(:green) + " with " + "#{job[1]}".colorize(:red) + " applications."
-      puts "*" *7
+    sort_popular_jobs.first(5).each_with_index do |job, i|
+      puts "-".colorize(:blue) * 30
+      puts "#{i + 1}. #{job[0].title.upcase}" + " with " + "#{job[1]}".colorize(:red) + " applications."
+      puts "-".colorize(:blue) * 30
     end
   end
 
@@ -184,10 +185,12 @@ end
   end
 
   def display_leaderboard
-    puts "    \033[1mTOP FIVE USERS\033[0m".colorize(:red)
-    sort_all_users_by_app_count.first(5).each do |user|
-      puts "      \033[1m#{user[0].name}\033[0m : #{user[1]}"
+    puts "     \033[1mTOP FIVE USERS\033[0m".colorize(:red)
+    sort_all_users_by_app_count.first(5).each_with_index do |user, i|
+      puts "  ##{i + 1}.  \033[1m#{user[0].name}\033[0m : #{user[1]}"
     end
+    puts " "
+    puts "=".colorize(:blue) * 30
     puts " "
   end
 
@@ -201,14 +204,14 @@ end
     input = ""
     get_name
     while input != "5"
-      puts "    1) Search for a new job.  2) See my applications.".colorize(:blue)
-      puts "    3) See popular jobs.      4) See Users with Most Applications".colorize(:blue)
-      puts "    5) Exit".colorize(:blue)
+      puts "    1) Search for a new job.  2) See my applications.".colorize(:yellow)
+      puts "    3) See popular jobs.      4) See Users with Most Applications".colorize(:yellow)
+      puts "    5) Exit".colorize(:yellow)
       print "What would you like to do today? "
       input = gets.chomp
       puts `clear`
       if input == "1"
-        puts "* If location and language doesn't apply, just hit enter. *".green
+        puts "* If location and language doesn't apply, just hit enter. *".red
         get_location
         get_language
         puts `clear`
