@@ -17,7 +17,7 @@ def anima(string)
   sleep(0.05)
  end
 end
-asc = "                                                    THE JOB APP"
+asc = "                                                            JOB HUNT"
 ascii = "
                             ,,,,
                             ,***,***,
