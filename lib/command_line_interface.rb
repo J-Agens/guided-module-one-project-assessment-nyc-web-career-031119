@@ -100,7 +100,7 @@ def apply_to_job
         puts "Good choice!"
       end
     end
-    print "Would you like to apply to any of these jobs?".yellow + "(Y/N): ".green
+    print "Would you like to apply to any more of these jobs?".yellow + "(Y/N): ".green
     new_input = gets.chomp
     if new_input.downcase == "y" || user_input.downcase == "yes"
       puts `clear`
