@@ -179,7 +179,8 @@ end
         puts "REMOVAL SUCCESSFUL!".red
       elsif menu_input == 3 || list_of_applications.count == 0
         puts `clear`
-        puts "Returned to Main Menu".colorize(:red)
+        puts "    MAIN MENU"
+        puts " "
       else
         puts "Invalid input, please try again.".colorize(:red)
       end
