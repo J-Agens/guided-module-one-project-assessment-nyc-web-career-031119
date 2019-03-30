@@ -90,7 +90,7 @@ def apply_to_job
       end
     else
       puts "YOU'VE ALREADY APPLIED TO THIS JOB".red
-      print "Do you want send another application?".yellow + " (Y/N): ".green
+      print "Do you want save another application?".yellow + " (Y/N): ".green
       user_input = gets.chomp
       if user_input.downcase == "y" || user_input.downcase == "yes"
         new_job.save
