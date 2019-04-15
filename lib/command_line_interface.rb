@@ -164,8 +164,9 @@ end
 
         menu_input = gets.chomp
         if Job.where(id: menu_input)[0] != nil
-        puts Job.where(id: menu_input)[0].description.gsub(/<p.*?>|<\/p>/, '').gsub(/<h1.*?>|<\/h1>/, bsp).gsub(/<li.*?>|<\/li>/, "  * ").gsub(/<ul.*?>|<\/ul>/, '').gsub(/<strong.*?>|<\/strong>/, '')
-        puts "-" * 7
+        # puts Job.where(id: menu_input)[0].description.gsub(/<p.*?>|<\/p>/, '').gsub(/<h1.*?>|<\/h1>/, bsp).gsub(/<li.*?>|<\/li>/, "  * ").gsub(/<ul.*?>|<\/ul>/, '').gsub(/<strong.*?>|<\/strong>/, '')
+        # puts "-" * 7
+        description_menu(menu_input)
         else
           puts "Invalid input, please try again.".colorize(:red)
         end
@@ -185,6 +186,22 @@ end
         puts "Invalid input, please try again.".colorize(:red)
       end
     end
+  end
+
+  def description_menu(menu_input)
+    puts `clear`
+    puts Job.where(id: menu_input)[0].description.gsub(/<p.*?>|<\/p>/, '').gsub(/<h1.*?>|<\/h1>/, bsp).gsub(/<li.*?>|<\/li>/, "  * ").gsub(/<ul.*?>|<\/ul>/, '').gsub(/<strong.*?>|<\/strong>/, '')
+    puts "-" * 7
+    des_input = ""
+    while des_input != 1
+      prompt_d = TTY::Prompt.new
+      choices = [
+        {name: 'Back'.yellow, value: 1}
+      ]
+      des_input = prompt_d.select("Press Enter to Go Back".yellow, choices)
+    end
+    puts `clear`
+    display_user_applications
   end
 
   # SEE popular jobs option 3
