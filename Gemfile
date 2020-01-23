@@ -7,7 +7,7 @@ gem "sinatra-activerecord"
 gem 'rake'
 gem "require_all"
 # gem "sqlite3", '~> 1.3.6'
-gem "sqlite3", '~> 1.3.13' # Changed for Datadog challenge
+gem "sqlite3", '~> 1.4' # Changed for Datadog challenge
 gem "pry"
 gem "rest-client"
 gem "faker"
