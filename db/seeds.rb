@@ -27,7 +27,7 @@ end
   User.create(name: Faker::Name.name, location: Faker::Address.state, favorite_language: "php")
 end
 
-60.times do
+30.times do
   Application.create(user_id: rand(User.first.id..(User.all.length + User.all.first.id)), job_id: rand(Job.first.id..(Job.all.length + Job.all.first.id)))
 end
 
