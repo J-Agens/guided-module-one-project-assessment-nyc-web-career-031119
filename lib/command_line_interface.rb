@@ -108,6 +108,11 @@ def apply_to_job
       if new_job.is_a?(Job)
         new_job.save
         Application.create(user_id: @user.id, job_id: new_job.id)
+        ############# ADDED FOR DATADOG EXERCISE ##########################################################
+        require 'datadog/statsd'
+        statsd = Datadog::Statsd.new('localhost', 8125)
+        statsd.increment('rubyapp.jobapps.count')
+        #################################################################################################
         puts "APPLICATION SAVED".colorize(:red)
       else
         puts "INVALID ID".red
