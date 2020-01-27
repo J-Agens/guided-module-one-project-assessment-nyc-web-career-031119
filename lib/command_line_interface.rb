@@ -1,3 +1,15 @@
+require 'datadog/statsd'
+
+require 'rubygems'
+require 'dogapi'
+
+api_key = "00182545a0ebada08e843e3a94b16d03	"
+application_key = "2a5206b6c115d0c661ff3dfb4f73a1a39e9ab99d"
+
+dog = Dogapi::Client.new(api_key)
+
+statsd = Datadog::Statsd.new('localhost', 8125)
+
 class CommandLineInterface
 
   attr_accessor :user, :searched_jobs
@@ -64,17 +76,6 @@ class CommandLineInterface
     @data = JSON.parse(@response.body)
 
     ############# ADDED FOR DATADOG EXERCISE ##########################################################
-    require 'datadog/statsd'
-
-    require 'rubygems'
-    require 'dogapi'
-
-    api_key = "00182545a0ebada08e843e3a94b16d03	"
-    application_key = "2a5206b6c115d0c661ff3dfb4f73a1a39e9ab99d"
-
-    dog = Dogapi::Client.new(api_key)
-
-    statsd = Datadog::Statsd.new('localhost', 8125)
 
     dog.emit_event(Dogapi::Event.new('A new search has been conducted.', :msg_title => 'Search Alert'))
     #################################################################################################
