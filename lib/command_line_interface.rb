@@ -59,6 +59,10 @@ class CommandLineInterface
     @user.save
     @response = RestClient.get("https://jobs.github.com/positions.json?utf8=%E2%9C%93&description=#{@user.favorite_language.split(' ').join('+')}&location=#{@user.location.split(' ').join('+')}")
     @data = JSON.parse(@response.body)
+
+    ########### ADDED FOR DATADOG ##############
+    dog.emit_event(Dogapi::Event.new('A new search has been conducted.', :msg_title => 'Search Alert'))
+    ###########################################
   end
 
 def apply_to_job

@@ -16,3 +16,4 @@ gem 'tty-prompt'
 
 ## BELOW ADDED for Datadog challenge
 gem 'dogstatsd-ruby'
+gem 'dogapi'
