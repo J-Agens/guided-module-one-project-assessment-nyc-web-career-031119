@@ -49,7 +49,7 @@ class CommandLineInterface
 
     statsd = Datadog::Statsd.new('localhost', 8125)
 
-    statsd.increment('page.views')
+    statsd.increment('rubyapp.pages.views')
     #########################################
   end
 
