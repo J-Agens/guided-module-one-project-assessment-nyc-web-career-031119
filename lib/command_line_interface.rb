@@ -122,7 +122,7 @@ def apply_to_job
         ############# ADDED FOR DATADOG EXERCISE ##########################################################
         require 'datadog/statsd'
         statsd = Datadog::Statsd.new('localhost', 8125)
-        statsd.increment('rubyapp.applications.count')
+        statsd.increment('rubyapp.jobapps.count')
         #################################################################################################
         puts "APPLICATION SAVED".colorize(:green)
       else
