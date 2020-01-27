@@ -119,6 +119,11 @@ def apply_to_job
       if user_input.downcase == "y" || user_input.downcase == "yes"
         new_job.save
         Application.create(user_id: @user.id, job_id: new_job.id)
+        ############# ADDED FOR DATADOG EXERCISE ##########################################################
+        require 'datadog/statsd'
+        statsd = Datadog::Statsd.new('localhost', 8125)
+        statsd.increment('rubyapp.applications.submitted')
+        #################################################################################################
         puts "APPLICATION SAVED".colorize(:green)
       else
         puts "Good choice!"
