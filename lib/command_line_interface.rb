@@ -60,9 +60,19 @@ class CommandLineInterface
     @response = RestClient.get("https://jobs.github.com/positions.json?utf8=%E2%9C%93&description=#{@user.favorite_language.split(' ').join('+')}&location=#{@user.location.split(' ').join('+')}")
     @data = JSON.parse(@response.body)
 
-    ########### ADDED FOR DATADOG ##############
+    ############# ADDED FOR DATADOG EXERCISE ##########################################################
+    require 'datadog/statsd'
+
+    require 'rubygems'
+    require 'dogapi'
+
+    api_key = "00182545a0ebada08e843e3a94b16d03	"
+    application_key = "2a5206b6c115d0c661ff3dfb4f73a1a39e9ab99d"
+
+    dog = Dogapi::Client.new(api_key)
+
     dog.emit_event(Dogapi::Event.new('A new search has been conducted.', :msg_title => 'Search Alert'))
-    ###########################################
+    #################################################################################################
   end
 
 def apply_to_job
