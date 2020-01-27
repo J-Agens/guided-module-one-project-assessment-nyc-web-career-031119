@@ -78,7 +78,10 @@ class CommandLineInterface
 
     ############# ADDED FOR DATADOG EXERCISE ##########################################################
 
-    # dog.emit_event(Dogapi::Event.new('A new search has been conducted.', :msg_title => 'Search Alert'))
+    require 'datadog/statsd'
+    statsd = Datadog::Statsd.new('localhost', 8125)
+
+    statsd.increment('rubyapp.searches.count')
     #################################################################################################
   end
 
