@@ -13,3 +13,6 @@ gem "rest-client"
 gem "faker"
 gem "colorize"
 gem 'tty-prompt'
+
+## BELOW ADDED for Datadog challenge
+gem 'dogstatsd-ruby'
